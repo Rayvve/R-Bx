@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schéma Viewer</title>
+    <style>
+		@font-face {
+			font-family: "NN Nouvelle Grotesk STD";
+			src: url("https://db.onlinewebfonts.com/t/e313dfb6f0d4c85cabeac18e264e5f5e.eot");
+			src: url("https://db.onlinewebfonts.com/t/e313dfb6f0d4c85cabeac18e264e5f5e.eot?#iefix")format("embedded-opentype"),
+			url("https://db.onlinewebfonts.com/t/e313dfb6f0d4c85cabeac18e264e5f5e.woff2")format("woff2"),
+			url("https://db.onlinewebfonts.com/t/e313dfb6f0d4c85cabeac18e264e5f5e.woff")format("woff"),
+			url("https://db.onlinewebfonts.com/t/e313dfb6f0d4c85cabeac18e264e5f5e.ttf")format("truetype"),
+			url("https://db.onlinewebfonts.com/t/e313dfb6f0d4c85cabeac18e264e5f5e.svg#NN Nouvelle Grotesk STD")format("svg");
+		}
+        
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'NNNouvelleGroteskSTD', sans-serif;
+            background-color: #FFF7F3;
+            color: #220021;
+            text-align: center;
+        }
+        .schema-container {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            max-height: 75vh;
+        }
+        h1 {
+            font-size: 24px;
+            margin: 10px 0;
+        }
+        img {
+            max-width: 90%;
+            max-height: 60vh;
+            border-radius: 10px;
+            background-color: #FFF7F3;
+            box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.2);
+        }
+        .description {
+            font-size: 16px;
+            margin-top: 10px;
+            padding: 0 10px;
+        }
+        .controls {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+            background-color: #CC3D20;
+            border-radius: 10px 10px 0 0;
+        }
+        button {
+            flex: 1;
+            padding: 16px 0;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            background-color: #F44E27;
+            color: #220021;
+            cursor: pointer;
+            transition: background 0.3s ease, color 0.3s ease;
+            margin: 0 10px;
+        }
+        button:hover {
+            background-color: #CC3D20;
+            color: #FFF7F3;
+        }
+        button:disabled {
+            background-color: #555;
+            color: #FFF7F3;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="schema-container">
+        <h1 id="schema-title">Schéma 1</h1>
+        <img id="schema" src="schema1.jpg" alt="Schéma">
+        <p class="description" id="schema-description">Description du schéma 1.</p>
+    </div>
+    <div class="controls">
+        <button id="prev" disabled>Précédent</button>
+        <button id="next">Suivant</button>
+    </div>
+
+    <script>
+        const schemas = [
+            { title: "Etape N°1", src: "schema1.jpg", description: "Branchez l'alimentation 12V de la Résabox." },
+            { title: "Etape N°2", src: "schema2.jpg", description: "Connectez un câble RJ45 entre le port LAN1 de la Résabox sur une connexion à Internet." },
+            { title: "Etape N°3", src: "schema3.jpg", description: "Vous devrez connecter les Kits du contrôle d'accès sur le LAN2 de votre Résabox." },
+            { title: "Etape N°4", src: "schema4.jpg", description: "Allumez votre Résabox, un bip sonore est émis lors du démarrage, le voyant doit être au vert." },
+            { title: "Etape N°5", src: "schema5.jpg", description: "HELP" }
+        ];
+        let currentIndex = 0;
+        const imgElement = document.getElementById("schema");
+        const titleElement = document.getElementById("schema-title");
+        const descriptionElement = document.getElementById("schema-description");
+        const prevButton = document.getElementById("prev");
+        const nextButton = document.getElementById("next");
+
+        function updateSchema() {
+            const schema = schemas[currentIndex];
+            imgElement.src = schema.src + "?t=" + new Date().getTime(); // Forcer le rechargement
+            titleElement.textContent = schema.title;
+            descriptionElement.textContent = schema.description;
+            prevButton.disabled = currentIndex === 0;
+            nextButton.disabled = currentIndex === schemas.length - 1;
+        }
+
+        prevButton.addEventListener("click", () => {
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateSchema();
+            }
+        });
+
+        nextButton.addEventListener("click", () => {
+            if (currentIndex < schemas.length - 1) {
+                currentIndex++;
+                updateSchema();
+            }
+        });
+    </script>
+</body>
+</html>
